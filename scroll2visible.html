@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <style type="text/css">
+        body {
+            height: 2600px;
+        }
+        #list {
+            margin: 0;
+            padding: 0;
+            width: 180px;
+            border: 1px solid gray;
+        }
+        li {
+            height: 55px;
+            border: 1px solid lightgray;
+            background-color: cornsilk;
+            margin: 1px;
+            padding: 0;
+            list-style-type: none;
+        }
+        #item {
+            background-color: limegreen;
+            color: white;
+        }
+        #controls {
+            position: fixed;
+            top: 190px;
+            left: 270px;
+            border: 1px solid lightgray;
+            background-color: pink;
+        }
+        #debug {
+            position: fixed;
+            margin: 0;
+            padding: 3px;
+            z-index:3;
+            top: 230px;
+            left: 270px;
+            width: 550px;
+            height: 300px;
+            background-color: lightcyan;
+            border: 2px solid darkseagreen;
+            overflow: scroll;
+        }
+    </style>
+</head>
+<body>
+<h1 style="background-color:gray;color:orange">Headline</h1>
+
+<div id="content">
+
+    <p style="height:100px;background-color:yellowgreen;">100px height of lorem ipsum dolor ...</p>
+
+    <div id="controls">
+        <button onclick="showCoords()">Show coordinates</button>
+        <button onclick="clearLog()">Clear</button>
+        <button onclick="scrollInto()">Scroll into view</button>
+    </div>
+
+    <pre id="debug"></pre>
+
+    <ul id="list">
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li id="item">item</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+        <li>hallo</li>
+    </ul>
+
+    <p style="height:200px;background-color:sandybrown">200px of vertical space</p>
+
+</div>
+<script type="text/javascript">
+    function log(t) {
+        var el = document.getElementById("debug");
+        if (document.all) {
+            el.innerText = el.innerText + "\n" + t;
+        } else{
+            el.textContent = el.textContent + "\n" + t;
+        }
+    }
+    function clearLog() {
+        var el = document.getElementById("debug");
+        el.innerText = "";
+    }
+    function logRect(rect) {
+        log("rect top: " + rect.top + ", left: " + rect.left + ", right: " + rect.right + ", bottom: " + rect.bottom);
+    }
+    function logWndPageOffset() {
+        log("window.pageYOffset: " + window.pageYOffset + ", window.pageXOffset: " + window.pageXOffset);
+    }
+
+    function showCoords() {
+        var list = document.getElementById("list");
+        var item = document.getElementById("item");
+        var rect = item.getBoundingClientRect();
+        var lrect = list.getBoundingClientRect();
+        var pageYOffset = window.pageYOffset;
+        var winHeight = window.innerHeight;
+        log("window.innerHeight: " + winHeight);
+        logRect(rect);
+        logRect(lrect);
+        logWndPageOffset();
+    }
+
+    var scrollIntoAdditionalSpace = 15;
+
+    function scrollInto() {
+        var winHeight = window.innerHeight;
+        var item = document.getElementById("item");
+        var rect = item.getBoundingClientRect();
+        logRect(rect);
+        log("winHeight " + winHeight);
+
+        if (rect.top > 0) { // item is at the bottom out of view
+            if (rect.top > winHeight && rect.bottom > winHeight) {
+                var h = rect.bottom - rect.top;
+                var d = h + rect.top - winHeight;
+                window.scrollBy(0, d + scrollIntoAdditionalSpace);
+            } else {
+                if (rect.bottom > winHeight) {
+                    var d = rect.bottom - winHeight;
+                    window.scrollBy(0, d + scrollIntoAdditionalSpace);
+                }
+            }
+        } else { // item is at the beginning out of the view
+            window.scrollBy(0, rect.top - scrollIntoAdditionalSpace);
+        }
+    }
+</script>
+</body>
+</html>
